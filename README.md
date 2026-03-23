@@ -20,16 +20,24 @@ Give your AI agents a brain that persists across sessions. Built with Python, SQ
 
 - Python 3.12+
 - [uv](https://docs.astral.sh/uv/) (recommended) or pip
+- [just](https://github.com/casey/just) (optional, for setup commands)
 
 ### Installation
 
 ```bash
 git clone https://github.com/angelozdev/second-brain-memory.git
 cd second-brain-memory
-./setup.sh
+just install                    # install dependencies
+just install-global             # skill available in all projects
+# or
+just install-project ~/my-app   # skill only in that project
 ```
 
-The setup script installs dependencies and lets you choose where to install the `memory-init` skill (global or per-project).
+Without `just`:
+```bash
+uv sync
+# then manually symlink skills/memory-init to ~/.claude/skills/ or .claude/skills/
+```
 
 ### Configure your AI agent
 
@@ -145,17 +153,24 @@ src/second_brain_memory/
 └── server.py            # FastMCP server entry point
 ```
 
+## Available Commands
+
+```
+just install                    # Install dependencies
+just test                       # Run tests
+just test-verbose               # Run tests with verbose output
+just install-global             # Install skill globally
+just install-project dir="."    # Install skill in a project
+just uninstall-global           # Remove global skill
+just uninstall-project dir="."  # Remove skill from project
+just show-config                # Show example .mcp.json
+```
+
 ## Development
 
 ```bash
-# Install with dev dependencies
-uv sync
-
-# Run tests
-uv run pytest
-
-# Run tests with verbose output
-uv run pytest -v
+just install   # install deps
+just test      # run tests
 ```
 
 ### Database
@@ -170,10 +185,10 @@ The SQLite database is stored at `~/.second-brain-memory/data/memories.db` by de
 
 The memory system works best when the agent knows **when** to save, search, and close sessions automatically. See [`protocol.md`](protocol.md) for a ready-to-use protocol that includes:
 
-- **SessionStart hook** — automatically starts a session and loads context on every new conversation
+- **`memory-init` skill** — starts a session and loads context with `/memory-init`
 - **Memory rules** — proactive save triggers, search behavior, session close, and post-compaction recovery
 
-You can activate it **per-project** or **globally**. See the file for step-by-step instructions.
+Install the skill with `just install-global` or `just install-project`, then see [`protocol.md`](protocol.md) for the memory rules to add to your `CLAUDE.md`.
 
 ## Inspired by
 

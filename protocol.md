@@ -7,10 +7,13 @@ This protocol makes the memory system automatic. It consists of two parts:
 
 ## Setup
 
-Run `./setup.sh` to install dependencies and the skill. The script asks where to install:
+Install the skill:
 
-- **Global** (`~/.claude/skills/`) — available in all projects
-- **Per-project** (`.claude/skills/`) — available only in that project
+```bash
+just install-global             # available in all projects
+# or
+just install-project ~/my-app   # available only in that project
+```
 
 Then:
 
