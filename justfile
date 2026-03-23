@@ -16,14 +16,14 @@ test-verbose:
 # Install skill globally (~/.claude/skills/)
 install-global: install
     mkdir -p ~/.claude/skills
-    ln -sf {{ skill_src }} ~/.claude/skills/memory-init
+    ln -sf "{{ skill_src }}" ~/.claude/skills/memory-init
     @echo "Skill installed globally: ~/.claude/skills/memory-init"
 
 # Install skill in a specific project
 install-project dir=".": install
-    mkdir -p {{ dir }}/.claude/skills
-    ln -sf {{ skill_src }} {{ dir }}/.claude/skills/memory-init
-    @echo "Skill installed in {{ dir }}/.claude/skills/memory-init"
+    mkdir -p "{{ dir }}/.claude/skills"
+    ln -sf "{{ skill_src }}" "{{ dir }}/.claude/skills/memory-init"
+    @echo "Skill installed in {{ dir }}"
 
 # Uninstall skill from global
 uninstall-global:
@@ -32,9 +32,9 @@ uninstall-global:
 
 # Uninstall skill from a project
 uninstall-project dir=".":
-    rm -f {{ dir }}/.claude/skills/memory-init
-    @echo "Skill removed from {{ dir }}/.claude/skills/"
+    rm -f "{{ dir }}/.claude/skills/memory-init"
+    @echo "Skill removed from {{ dir }}"
 
 # Show example .mcp.json configuration
 show-config:
-    @cat {{ repo_dir }}/mcp.example.json
+    @cat "{{ repo_dir }}/mcp.example.json"
