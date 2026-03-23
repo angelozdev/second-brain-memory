@@ -164,6 +164,15 @@ The SQLite database is stored at `~/.second-brain-memory/data/memories.db` by de
 - **FTS5** virtual table for full-text search
 - **Automatic migrations** (V1 -> V2 -> V3) when the schema changes
 
+## Automatic Protocol
+
+The memory system works best when the agent knows **when** to save, search, and close sessions automatically. See [`protocol.md`](protocol.md) for a ready-to-use protocol that includes:
+
+- **SessionStart hook** — automatically starts a session and loads context on every new conversation
+- **Memory rules** — proactive save triggers, search behavior, session close, and post-compaction recovery
+
+You can activate it **per-project** or **globally**. See the file for step-by-step instructions.
+
 ## Inspired by
 
 [Engram](https://github.com/Gentleman-Programming/engram) by Gentleman Programming.
