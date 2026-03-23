@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "memory": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "--directory", "/path/to/second-brain-memory",
+        "run", "second-brain-memory"
+      ],
+      "env": {
+        "SBM_PROJECT": "my-project"
+      }
+    }
+  }
+}
