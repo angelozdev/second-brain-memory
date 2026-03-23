@@ -27,6 +27,7 @@ Initialize the memory system for this conversation.
 ## Output
 
 After running both tools, summarize:
+
 - Session ID created
 - Number of previous sessions found
 - Key memories from recent sessions (if any)
