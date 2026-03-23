@@ -26,8 +26,10 @@ Give your AI agents a brain that persists across sessions. Built with Python, SQ
 ```bash
 git clone https://github.com/angelozdev/second-brain-memory.git
 cd second-brain-memory
-uv sync
+./setup.sh
 ```
+
+The setup script installs dependencies and lets you choose where to install the `memory-init` skill (global or per-project).
 
 ### Configure your AI agent
 

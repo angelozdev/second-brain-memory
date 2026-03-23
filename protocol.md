@@ -2,54 +2,37 @@
 
 This protocol makes the memory system automatic. It consists of two parts:
 
-1. **SessionStart hook** — automatically starts a session and loads context when you open a conversation
+1. **`memory-init` skill** — starts a session and loads context with `/memory-init`
 2. **Memory rules** — tells the agent when to save, search, and close sessions
 
 ## Setup
 
-### Option A: Per-project (recommended)
+Run `./setup.sh` to install dependencies and the skill. The script asks where to install:
 
-Activate memory only in specific projects.
+- **Global** (`~/.claude/skills/`) — available in all projects
+- **Per-project** (`.claude/skills/`) — available only in that project
 
-**Step 1.** Add the MCP server to your project's `.mcp.json` (see [README](README.md#configure-your-ai-agent))
+Then:
 
-**Step 2.** Add the SessionStart hook to `.claude/settings.local.json`:
+1. Add the MCP server to your project's `.mcp.json` (see [README](README.md#configure-your-ai-agent))
+2. Copy the memory rules below into your `CLAUDE.md`
+3. Restart Claude Code
 
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [
-          {
-            "type": "agent",
-            "prompt": "If mem_session_start and mem_context tools are available: 1) Call mem_session_start to register this session. 2) Call mem_context to load recent context. 3) Return the context summary so it is available in the conversation. If the tools are not available, do nothing and return nothing."
-          }
-        ]
-      }
-    ]
-  }
-}
+## Using the skill
+
+Start every conversation with:
+
+```
+/memory-init
 ```
 
-**Step 3.** Add the memory rules below to your project's `CLAUDE.md`.
-
-### Option B: Global
-
-Activate memory in all projects where the MCP server is configured.
-
-**Step 1.** Add the hook to `~/.claude/settings.json` (same JSON as above)
-
-**Step 2.** Add the memory rules below to `~/.claude/CLAUDE.md`
-
-The hook is safe in projects without the MCP server — it checks for tool availability before calling anything.
+This calls `mem_session_start` + `mem_context` and gives you a summary of previous sessions.
 
 ---
 
 ## Memory Rules
 
-Copy this block into your `CLAUDE.md`:
+Copy this block into your `CLAUDE.md` (per-project) or `~/.claude/CLAUDE.md` (global):
 
 ````markdown
 ## Memory Protocol (second-brain-memory)
@@ -104,18 +87,21 @@ If the context gets compacted:
 ## How it works
 
 ```
-Session starts
-    ↓
-Hook runs automatically
-    ↓
-mem_session_start → registers session
-mem_context → loads recent sessions + memories
-    ↓
+/memory-init (or Skill("memory-init"))
+    |
+    v
+mem_session_start --> registers session (auto-ID, auto-close stale)
+mem_context       --> loads recent sessions + orphan memories
+    |
+    v
 Agent has full context from previous sessions
-    ↓
+    |
+    v
 During conversation: saves proactively, searches when needed
-    ↓
+    |
+    v
 Before ending: session summary + session end
-    ↓
+    |
+    v
 Next session picks up where this one left off
 ```
